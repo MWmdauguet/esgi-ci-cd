@@ -6,8 +6,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: code
+      - name: Checkout
         uses: actions/checkout@v7
 
       - name: Setup Node
@@ -15,7 +16,7 @@ jobs:
         with:
           node-version: 24.18.0
 
-      - name: cache node
+      - name: Cache node
         uses: actions/cache@v5
         with:
           path: ~/.npm
@@ -23,20 +24,20 @@ jobs:
 
       - name: Dep install
         run: npm ci
-    
+
       - name: Build project
         run: npm run build
 
-      - name: build file exist
-        run: file_exist
+      - name: Build file exist
         run: |
-          if [ -f "./build" ]; then
-            echo "Le fichier build existe"
+          if [ -d "./dist" ]; then
+            echo "Le dossier dist existe"
           else
-            echo "Le fichier build n'existe pas"
+            echo "Le dossier dist n'existe pas"
             exit 1
+          fi
 
-      - name: Arteface
+      - name: Artefact
         uses: actions/upload-artifact@v7
         with:
           name: build
