@@ -20,9 +20,6 @@ jobs:
         with:
           path: ~/.npm
           key: npm-${{ hashFiles('package-lock.json') }}
-
-      - name: Dep install
-        run: npm install
           
       - name: Run test
         run: npm test
@@ -30,7 +27,7 @@ jobs:
       - name: Summary
         run: |
           echo "## Résultat des tests" > $GITHUB_STEP_SUMMARY
-          echo "✅ Tous les tests sont passés" > $GITHUB_STEP_SUMMARY
+          echo "✅ Tous les tests sont passés" >> $GITHUB_STEP_SUMMARY
 
       
 
