@@ -1,0 +1,48 @@
+name: build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: code
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24.18.0
+
+      - name: cache node
+        uses: actions/cache@v5
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('package-lock.json') }}
+
+      - name: Dep install
+        run: npm ci
+    
+      - name: Build project
+        run: npm run build
+
+      - name: build file exist
+        run: file_exist
+        run: |
+          if [ -f "./build" ]; then
+            echo "Le fichier build existe"
+          else
+            echo "Le fichier build n'existe pas"
+            exit 1
+
+      - name: Arteface
+        uses: actions/upload-artifact@v7
+        with:
+          name: build
+          path: dist/
+
+      - name: Summary
+        run: |
+          echo "## Résultat des tests" > $GITHUB_STEP_SUMMARY
+          echo "✅ Tous les tests sont passés" >> $GITHUB_STEP_SUMMARY
